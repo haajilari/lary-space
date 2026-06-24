@@ -1,0 +1,4 @@
+SYNTHETIC COMMIT FIXTURE — NOT REAL DEVELOPMENT
+Date: 2026-06-24
+Sample: 15/24
+This file is intentionally a demonstration fixture only.
