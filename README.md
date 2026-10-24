@@ -30,8 +30,10 @@ Requires Node.js 20.9+.
 - Fixed desktop section roadmap, compact mobile navigation, functional anchor navigation
 - Three portfolio project cards with accessible case-study dialogs (Escape and focus handling)
 - Soundspace. SoundCloud support is ready, but no playlist URL has been supplied yet
-- Real `mailto:` and GitHub links, copy-email action
-- Per-language metadata, OpenGraph image and icon
+- Contact dialog from the desktop/mobile navigation, section roadmap and contact buttons, with WhatsApp, email and LinkedIn choices; Escape, backdrop dismissal, keyboard focus containment and focus restoration
+- Real `mailto:` and GitHub links, copy-email action using `amirhossein.hajilari@gmail.com`
+- Self-hosted Vazirmatn variable font, including the Persian language-switch label on the English page
+- English browser title in both languages; localized descriptions, OpenGraph locale and icon
 
 ## Edit your public profile / connect SoundCloud
 
@@ -42,7 +44,10 @@ export const profile = {
   domain: "https://laryspace.tech",
   name: "Amirhossein Hajilari",
   github: "https://github.com/haajilari",
-  email: "amirhajilari@gmail.com",
+  email: "amirhossein.hajilari@gmail.com",
+  whatsappUsername: "haajilari",
+  linkedin: "https://www.linkedin.com/in/hajilari/",
+  linkedinMessageUrl: "",
   soundcloudUrl: "https://soundcloud.com/YOUR-ACCOUNT/YOUR-TRACK",
 } as const;
 ```
@@ -50,6 +55,12 @@ export const profile = {
 The SoundCloud track/playlist URL must be public and from soundcloud.com. A dedicated floating player appears only when an acceptable URL is configured. **No autoplay** is triggered. The embedded SoundCloud widget requires network connectivity and may be subject to browser privacy settings.
 
 If you would rather use playlists, paste the direct public playlist URL into the same field.
+
+The next requested feature after this contact/font update is to connect Lary's own SoundCloud account or a chosen public playlist.
+
+WhatsApp uses `https://wa.me/haajilari`, the username-link format documented by WhatsApp. The username must be active on the owner's account.
+
+For LinkedIn, paste the exact URL obtained from the owner's **Message** button into `linkedinMessageUrl` to open the addressed composer. It is deliberately empty until that URL is supplied; the contact choice currently opens the verified `/in/hajilari/` profile, where visitors can choose **Message**. LinkedIn controls sign-in and who can message the owner. Do not substitute the vanity slug for a LinkedIn member URN.
 
 ## Project descriptions
 
@@ -59,7 +70,7 @@ The work examples are intentionally **high-level editorial snapshots**, rather t
 
 1. Review project descriptions, legal/confidentiality considerations, and contact email.
 2. Supply actual SoundCloud public track/playlist URL.
-3. Add a genuine downloadable CV and LinkedIn URL if desired.
+3. Supply the exact LinkedIn Message URL and add a genuine downloadable CV if desired.
 4. Configure the domain `laryspace.tech` after explicitly approving deployment.
 5. Audit final mobile screenshots, run `npm run build`, and test link targets.
 

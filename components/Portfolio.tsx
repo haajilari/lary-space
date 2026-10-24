@@ -8,6 +8,7 @@ import { ArrowDown, ArrowUpRight, ChevronRight, CloseIcon, CopyIcon, GithubIcon,
 import ShellArtwork from "./ShellArtwork";
 import SectionRail from "./SectionRail";
 import ProjectModal from "./ProjectModal";
+import ContactModal from "./ContactModal";
 import Soundspace from "./Soundspace";
 
 const clamp = (v: number) => Math.max(0, Math.min(1, v));
@@ -18,6 +19,7 @@ export default function Portfolio({ locale }: { locale: Locale }) {
   const [shellProgress, setShellProgress] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [contactOpen, setContactOpen] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
   const rafRef = useRef<number | undefined>(undefined);
   const isFa = locale === "fa";
@@ -59,7 +61,7 @@ export default function Portfolio({ locale }: { locale: Locale }) {
     };
   }, []);
 
-  useEffect(() => { setMobileOpen(false); }, [locale]);
+  useEffect(() => { setMobileOpen(false); setContactOpen(false); }, [locale]);
   useEffect(() => {
     if (!mobileOpen) return;
     const escape = (e: KeyboardEvent) => { if (e.key === "Escape") setMobileOpen(false); };
@@ -68,6 +70,8 @@ export default function Portfolio({ locale }: { locale: Locale }) {
   }, [mobileOpen]);
 
   const dismissModal = useCallback(() => setSelectedProject(null), []);
+  const openContact = useCallback(() => { setMobileOpen(false); setContactOpen(true); }, []);
+  const dismissContact = useCallback(() => setContactOpen(false), []);
   const copyEmail = async () => {
     try { await navigator.clipboard.writeText(profile.email); setEmailCopied(true); window.setTimeout(() => setEmailCopied(false), 2300); }
     catch { window.location.href = `mailto:${profile.email}`; }
@@ -83,12 +87,12 @@ export default function Portfolio({ locale }: { locale: Locale }) {
             <Image className="header-logo" src="/branding/laryspace-logo.png" alt="LarySpace" width={1674} height={393} priority />
           </Link>
           <div className="header-tag">{isFa ? "یک فضای شخصی برای ساختن" : "A PERSONAL SPACE FOR MAKING"}</div>
-          <nav className="desktop-header-nav" aria-label="Main navigation"><a href="#work">{t.nav.work}</a><a href="#about">{t.nav.about}</a><a href="#contact">{t.nav.contact}</a></nav>
-          <div className="header-actions"><Link className="language-switch" aria-label={isFa ? "Switch to English" : "تغییر زبان به فارسی"} href={changeLanguage}>{t.switchLanguage}</Link><a href="#contact" className="header-cta"><span>{t.contact.email}</span><ArrowUpRight /></a><button className="mobile-toggle" aria-expanded={mobileOpen} aria-controls="mobile-nav" aria-label={mobileOpen ? t.close : t.menu} onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <CloseIcon /> : <MenuIcon />}</button></div>
+          <nav className="desktop-header-nav" aria-label="Main navigation"><a href="#work">{t.nav.work}</a><a href="#about">{t.nav.about}</a><button type="button" onClick={openContact} aria-haspopup="dialog">{t.nav.contact}</button></nav>
+          <div className="header-actions"><Link className="language-switch" lang={isFa ? "en" : "fa"} aria-label={isFa ? "Switch to English" : "تغییر زبان به فارسی"} href={changeLanguage}>{t.switchLanguage}</Link><button type="button" className="header-cta" onClick={openContact} aria-haspopup="dialog"><span>{t.contact.email}</span><ArrowUpRight /></button><button className="mobile-toggle" aria-expanded={mobileOpen} aria-controls="mobile-nav" aria-label={mobileOpen ? t.close : t.menu} onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <CloseIcon /> : <MenuIcon />}</button></div>
         </div>
       </header>
-      {mobileOpen ? <nav className="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">{sections.map((id, i) => <a key={id} href={`#${id}`} onClick={() => setMobileOpen(false)}><span>0{i + 1}</span>{t.nav[id]}<ChevronRight /></a>)}</nav> : null}
-      <SectionRail copy={t} active={currentSection} />
+      {mobileOpen ? <nav className="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">{sections.map((id, i) => id === "contact" ? <button key={id} type="button" onClick={openContact} aria-haspopup="dialog"><span>0{i + 1}</span>{t.nav[id]}<ChevronRight /></button> : <a key={id} href={`#${id}`} onClick={() => setMobileOpen(false)}><span>0{i + 1}</span>{t.nav[id]}<ChevronRight /></a>)}</nav> : null}
+      <SectionRail copy={t} active={currentSection} onContact={openContact} />
       <main>
         <section className="hero-section story-section" id="home" data-section="home" aria-labelledby="hero-heading">
           <div className="hero-sticky">
@@ -132,10 +136,11 @@ export default function Portfolio({ locale }: { locale: Locale }) {
         </section>
         <section className="stack-section story-section" id="stack" data-section="stack" aria-labelledby="stack-heading"><div className="layout-container section-pad"><div className="section-heading-grid"><span className="eyebrow dark">{t.stack.eyebrow}</span><div><h2 id="stack-heading" className="display-heading">{t.stack.title}</h2><p className="section-intro">{t.stack.description}</p></div></div><div className="stack-board"><div className="stack-main"><span className="eyebrow dark">{t.stack.main}</span>{t.stack.mainSkills.map((skill, i) => <div className="stack-big" key={skill}><span className="stack-index">0{i+1}</span><strong>{skill}</strong><span className="stack-chevron" aria-hidden>↗</span></div>)}</div><div className="stack-side"><span className="eyebrow dark">{t.stack.toolbox}</span><div className="stack-tags">{t.stack.extras.map(s => <span key={s}>{s}</span>)}</div><div className="stack-side-note"><span className="brand-asterisk">✳</span><p>{t.stack.build}</p></div></div></div></div></section>
         <Soundspace copy={t} />
-        <section className="contact-section story-section" id="contact" data-section="contact" aria-labelledby="contact-heading"><div className="contact-graphic" aria-hidden="true">✳</div><div className="layout-container contact-inner"><span className="eyebrow contact-eyebrow">{t.contact.eyebrow}</span><h2 id="contact-heading" className="display-heading"><span>{t.contact.title1}</span><em>{t.contact.title2}</em></h2><p>{t.contact.description}</p><div className="contact-actions"><a href={`mailto:${profile.email}`} className="contact-mail">{t.contact.email}<ArrowUpRight /></a><button type="button" className="copy-mail" onClick={copyEmail}><CopyIcon />{emailCopied ? t.contact.copied : t.contact.copy}</button></div><div className="contact-bottom"><a href={profile.github} target="_blank" rel="noreferrer noopener"><GithubIcon /> {t.contact.github} <ArrowUpRight /></a><span>{profile.email}</span></div></div></section>
+        <section className="contact-section story-section" id="contact" data-section="contact" aria-labelledby="contact-heading"><div className="contact-graphic" aria-hidden="true">✳</div><div className="layout-container contact-inner"><span className="eyebrow contact-eyebrow">{t.contact.eyebrow}</span><h2 id="contact-heading" className="display-heading"><span>{t.contact.title1}</span><em>{t.contact.title2}</em></h2><p>{t.contact.description}</p><div className="contact-actions"><button type="button" className="contact-mail" onClick={openContact} aria-haspopup="dialog">{t.contact.email}<ArrowUpRight /></button><button type="button" className="copy-mail" onClick={copyEmail}><CopyIcon />{emailCopied ? t.contact.copied : t.contact.copy}</button></div><div className="contact-bottom"><a href={profile.github} target="_blank" rel="noreferrer noopener"><GithubIcon /> {t.contact.github} <ArrowUpRight /></a><span>{profile.email}</span></div></div></section>
       </main>
       <footer className="site-footer"><div className="layout-container footer-inner"><div className="footer-main"><Image src="/branding/laryspace-logo.png" width={1674} height={393} alt="LarySpace"/><p>{t.contact.made}</p></div><div className="footer-other"><span>© {new Date().getFullYear()} LARYSPACE</span><span>{t.contact.rights}</span><a href="#home">↑ {t.nav.home}</a></div></div></footer>
       {selectedProject ? <ProjectModal project={selectedProject} copy={t} onClose={dismissModal} /> : null}
+      {contactOpen ? <ContactModal copy={t} onClose={dismissContact} /> : null}
     </div>
   );
 }

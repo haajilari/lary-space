@@ -27,7 +27,7 @@ These are design companions sampled and curated around the original PNG, **not a
 ## Typography
 
 - Latin: Avenir Next / system UI fallbacks.
-- Persian: Vazirmatn / Vazir / Tahoma fallbacks. No external font files bundled.
+- Persian: Vazirmatn variable font (weights 100–900), bundled in `app/fonts/` from upstream v33.003 and self-hosted through `next/font/local`; Vazir / Tahoma / sans-serif fallbacks. The SIL Open Font License is included beside the font. No font CDN is contacted at runtime.
 - Precise lettering and generous whitespace; avoid overloading the page with effects.
 
 ## Editorial tone

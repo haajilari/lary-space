@@ -23,7 +23,7 @@ export type Copy = {
   about: { eyebrow: string; title1: string; title2: string; lead: string; quote: string; quoteBy: string; values: readonly { index: string; title: string; body: string }[] };
   stack: { eyebrow: string; title: string; description: string; main: string; toolbox: string; build: string; mainSkills: readonly string[]; extras: readonly string[] };
   sound: { eyebrow: string; title1: string; title2: string; description: string; genre: string; awaiting: string; comingSoon: string; play: string; closePlayer: string; placeholder: string };
-  contact: { eyebrow: string; title1: string; title2: string; description: string; email: string; copy: string; copied: string; github: string; made: string; rights: string };
+  contact: { eyebrow: string; title1: string; title2: string; description: string; email: string; copy: string; copied: string; github: string; made: string; rights: string; dialogTitle: string; dialogDescription: string };
   modal: { close: string };
 };
 
@@ -35,7 +35,12 @@ export const profile = {
   domain: "https://laryspace.tech",
   name: "Amirhossein Hajilari",
   github: "https://github.com/haajilari",
-  email: "amirhajilari@gmail.com",
+  email: "amirhossein.hajilari@gmail.com",
+  whatsappUsername: "haajilari",
+  linkedin: "https://www.linkedin.com/in/hajilari/",
+  // Paste the exact link from LinkedIn's Message button when available.
+  // The verified profile is the fallback; do not invent a member URN.
+  linkedinMessageUrl: "",
   // Add a *public* SoundCloud track/playlist URL to activate the floating audio player.
   soundcloudUrl: "",
 } as const;
@@ -134,6 +139,7 @@ export const copy: Record<Locale, Copy> = {
     contact: {
       eyebrow: "05 / CONNECT", title1: "Let's make", title2: "something matter.", description: "A new idea, a difficult problem, or just a good conversation — my inbox is open.",
       email: "Say hello", copy: "Copy email", copied: "Copied!", github: "Explore GitHub", made: "An evolving space by Lary.", rights: "Built with purpose. Always becoming.",
+      dialogTitle: "Let's connect.", dialogDescription: "Choose where you'd like to say hello.",
     },
     modal: { close: "Close project" },
   },
@@ -170,6 +176,7 @@ export const copy: Record<Locale, Copy> = {
     contact: {
       eyebrow: "۰۵ / ارتباط", title1: "بیایید چیزی", title2: "ماندگار بسازیم.", description: "یک ایدهٔ تازه، مسئله‌ای پیچیده یا حتی یک گفت‌وگوی خوب؛ خوشحال می‌شوم از تو بشنوم.",
       email: "شروع گفت‌وگو", copy: "کپی ایمیل", copied: "کپی شد!", github: "دیدن گیت‌هاب", made: "فضایی در حال تکامل، از لری.", rights: "با دقت ساخته شده. همیشه در مسیر شدن.",
+      dialogTitle: "در ارتباط باشیم.", dialogDescription: "راه دلخواهت را برای گفت‌وگو انتخاب کن.",
     },
     modal: { close: "بستن پروژه" },
   },
