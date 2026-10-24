@@ -8,3 +8,6 @@
 npm-debug.log*
 /make_zip.txt
 /*.zip
+/dist/
+.vinext/
+.wrangler/

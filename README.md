@@ -19,7 +19,50 @@ npm run build
 npm start
 ```
 
-Requires Node.js 20.9+.
+Requires Node.js 22.12+; `.nvmrc` selects Node 24.
+
+## Cloudflare Workers
+
+Use Node.js 22.12+; `.nvmrc` selects Node 24 for Cloudflare Builds and local version managers.
+
+```bash
+npm ci
+npm run typecheck
+npm run build:vinext
+npm run check:worker
+npm run check:deploy
+```
+
+`check:worker` validates the built Worker with Wrangler's dry run. `check:deploy` validates the vinext deployment command without uploading or publishing.
+
+The project uses vinext 1.3.0 with its supported Wrangler integration, the Cloudflare Vite plugin and `wrangler.jsonc`. The Worker is named `lary-space`; its generated deploy configuration is `dist/server/wrangler.json`. The original Next.js development/build scripts remain available alongside `dev:vinext`, `build:vinext` and `start:vinext`.
+
+After committing and pushing to `haajilari/lary-space` on `main`, configure Workers Builds:
+
+| Dashboard field | Value |
+|---|---|
+| Worker name | `lary-space` |
+| Build command | `npm run build:vinext` |
+| Deploy command | `npm run deploy:vinext` |
+| Preview command | `npx wrangler preview --config dist/server/wrangler.json` |
+| Enable Preview builds | Off for the first deployment |
+| Protect with Cloudflare Access | Off for the public site |
+| Advanced / Path | `/` |
+| API token | Create a new Workers Builds token in the selector |
+| Build variable name | `CLOUDFLARE_ACCOUNT_ID` |
+| Build variable value | The destination account's Account ID |
+
+Copy Account ID in the Cloudflare dashboard via `Cmd+K` → `Copy account ID`, then paste it into the build variable. It is an account identifier; encryption is optional. Workers Builds supplies deployment authentication through the selected API token. The build uses only the static `ASSETS` binding; no AI, Browser Rendering, database or Cloudflare Images binding is configured. Images are served without edge resizing.
+
+The deployment script consumes the already built output using `--skip-build`. Test the resulting `workers.dev` address before adding `laryspace.tech` as a custom domain. The Preview command is unused while Preview builds are off.
+
+Local Worker preview after building:
+
+```bash
+npm run start:vinext
+```
+
+The compatibility scanner reports support for all Next.js imports used by this project. It reports partial App Router handling of `reactStrictMode`; the Next.js toolchain retains its original behavior. Build tools can emit sourcemap/chunk warnings; inspect failures by their exit status and runtime checks rather than assuming that a warning means deployment failed.
 
 ## Included
 
