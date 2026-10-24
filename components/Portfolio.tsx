@@ -8,6 +8,7 @@ import { ArrowDown, ArrowUpRight, ChevronRight, CloseIcon, CopyIcon, GithubIcon,
 import ShellArtwork from "./ShellArtwork";
 import SectionRail from "./SectionRail";
 import ProjectModal from "./ProjectModal";
+import ProjectGallery from "./ProjectGallery";
 import ContactModal from "./ContactModal";
 import Soundspace from "./Soundspace";
 
@@ -112,21 +113,7 @@ export default function Portfolio({ locale }: { locale: Locale }) {
           </div>
         </section>
         <section className="work-section story-section" id="work" data-section="work" aria-labelledby="work-heading">
-          <div className="layout-container section-pad">
-            <div className="section-heading-grid"><span className="eyebrow dark">{t.work.eyebrow}</span><div><h2 id="work-heading" className="display-heading">{t.work.title}</h2><p className="section-intro">{t.work.description}</p></div></div>
-            <div className="project-grid">{t.work.projects.map((project, index) => <button key={project.id} type="button" className={`project-card project-${project.id}`} onClick={() => setSelectedProject(project)} aria-label={`${t.work.more}: ${project.title}`}>
-              <div className={`project-cover project-cover-${project.id}`}>
-                <div className="project-cover-grain" /><div className="project-cover-inner">
-                  <span className="cover-top"><span>LARYSPACE / SELECTED WORK</span><span>{project.index}</span></span>
-                  <div className={`project-cover-art art-${project.id}`} aria-hidden="true">
-                    {project.id === "finance" ? <><i className="finance-node n1"/><i className="finance-node n2"/><i className="finance-node n3"/><i className="finance-link l1"/><i className="finance-link l2"/><span className="art-big-symbol">⟡</span></> : project.id === "logistics" ? <><span className="art-route r1"/><span className="art-route r2"/><span className="art-route r3"/><span className="art-route-dot d1"/><span className="art-route-dot d2"/><span className="art-route-dot d3"/></> : <><span className="art-document doc-1"/><span className="art-document doc-2"/><span className="art-document doc-3"/></>}
-                  </div>
-                  <span className="cover-bottom">THOUGHTFULLY / ENGINEERED <span>↗</span></span>
-                </div>
-              </div>
-              <div className="project-info"><span className="eyebrow dark">{project.kicker}</span><h3>{project.title}</h3><p>{project.summary}</p><div className="project-info-bottom"><span className="project-view">{t.work.more} <ArrowUpRight /></span><span className="project-number">0{index+1} / 03</span></div></div>
-            </button>)}</div>
-          </div>
+          <ProjectGallery key={locale} copy={t} locale={locale} onSelect={setSelectedProject}/>
         </section>
         <section className="about-section story-section" id="about" data-section="about" aria-labelledby="about-heading">
           <div className="about-background-curve" aria-hidden="true" />

@@ -165,6 +165,37 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0; 
 .project-info-bottom { margin-top: auto; padding-top: 29px; display: flex; justify-content: space-between; border-top: 1px solid #e4e9e0; gap: 8px; align-items: center; }
 .project-view { font-size: 12px; font-weight: 800; color: #146742; display: inline-flex; align-items: center; gap: 9px; }.project-view svg { width: 15px; height: 15px; }
 .project-number { font: 9px var(--font-latin); color: #8a9f90; }
+.work-gallery { padding-inline-end: 124px; }
+.project-line-art { display: flex; align-items: center; justify-content: center; }
+.project-line-art svg { width: 128px; height: 128px; color: #bde9b2; }
+.project-gallery-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+.project-count { margin: 0; font-size: 13px; color: #527563; }
+.project-toggle { border: 1px solid #a7c5ae; background: transparent; color: #124e34; gap: 14px; }
+.project-toggle:hover { background: #e3eddf; }
+.project-toggle svg { width: 16px; height: 16px; transition: transform .2s; }
+.project-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.project-extra-count { font-variant-numeric: tabular-nums; }
+.additional-projects { margin-top: 32px; }
+.additional-projects[hidden] { display: none; }
+.enterprise-experience, .in-progress-projects { margin-top: 64px; padding-top: 35px; border-top: 1px solid #bfd1bf; }
+.work-subheading { margin-bottom: 24px; }
+.work-subheading h3 { margin: 0 0 10px; font-size: clamp(24px,3vw,34px); letter-spacing: -.035em; }
+.work-subheading p { margin: 0; color: #527563; font-size: 14px; line-height: 1.9; }
+.enterprise-projects { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.enterprise-project { display: flex; align-items: flex-start; gap: 14px; padding: 22px 18px; text-align: start; background: #fff; color: var(--ink); border: 1px solid #d2dfce; border-radius: 12px; cursor: pointer; }
+.enterprise-project:hover { border-color: #6ea480; }
+.enterprise-code { flex: 0 0 auto; font: 800 14px var(--font-latin); color: #087648; padding-top: 2px; }
+.enterprise-project > span:nth-child(2) { min-width: 0; display: grid; gap: 10px; }
+.enterprise-project strong { font-size: 15px; line-height: 1.5; }
+.enterprise-project > span:nth-child(2) > span { font-size: 12px; color: #61786a; line-height: 1.8; }
+.enterprise-project > svg { flex: 0 0 16px; width: 16px; height: 16px; margin-inline-start: auto; }
+.in-progress-project { display: grid; justify-items: start; gap: 15px; width: 100%; padding: 28px; text-align: start; background: #e7efe1; color: var(--ink); border: 1px solid #b9cdb4; border-radius: 13px; cursor: pointer; }
+.in-progress-project:hover { border-color: #6ea480; background: #e1ecdc; }
+.in-progress-project > strong { font-size: clamp(20px,2.3vw,28px); line-height: 1.5; }
+.in-progress-project > span:not(.project-stage):not(.project-view) { font-size: 14px; color: #527563; line-height: 1.9; }
+.project-stage { display: inline-flex; align-items: center; gap: 9px; color: #25593a; font-size: 12px; font-weight: 700; }
+.project-stage > span { width: 7px; height: 7px; border-radius: 50%; background: #45895a; }
+.modal-stage { margin-bottom: 16px; }
 
 /* About */
 .about-section { background: #09291d; position: relative; color: #f2f7ed; overflow: hidden; }
@@ -308,6 +339,7 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0; 
 /* Accessibility and responsive */
 @media (max-width: 1320px) {
   .layout-container { width: min(calc(100% - 100px), 1200px); }
+  .work-gallery { padding-inline-end: 24px; }
   .sound-player { margin-inline-end: 24px; }
   .section-rail { width: 48px; padding-inline: 15px 11px; }
   .rail-track { gap: 15px; }
@@ -367,6 +399,10 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0; 
   .display-heading { font-size: clamp(40px,8vw,66px); }
   .section-intro { margin-top: 18px; font-size: 15px; }
   .project-grid { grid-template-columns: 1fr; gap: 20px; max-width: 620px; }
+  .work-gallery { padding-inline-end: 0; }
+  .enterprise-projects { grid-template-columns: 1fr; }
+  .project-gallery-controls { align-items: flex-start; flex-direction: column; }
+  .in-progress-project { padding: 22px; }
   .project-cover { height: 270px; }
   .project-info { padding: 25px; }.project-info p { min-height: 0; margin-bottom: 25px; }
   .about-layout { grid-template-columns: 1fr; gap: 50px; }

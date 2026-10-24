@@ -1,6 +1,6 @@
 export type Locale = "en" | "fa";
 export type SectionId = "home" | "work" | "about" | "stack" | "sound" | "contact";
-export type ProjectId = "finance" | "logistics" | "documents";
+export type ProjectId = "finance" | "rail" | "newsletter" | "aircargo" | "zixo" | "walliro" | "logistics" | "documents" | "pms" | "tms" | "ims";
 export type Project = {
   id: ProjectId;
   index: string;
@@ -8,10 +8,11 @@ export type Project = {
   kicker: string;
   summary: string;
   stack: readonly string[];
-  challenge: string;
-  approach: string;
+  challenge?: string;
+  approach?: string;
   detail: string;
   features: readonly string[];
+  stage?: "in-progress";
 };
 export type Copy = {
   nav: Record<SectionId, string>;
@@ -19,7 +20,7 @@ export type Copy = {
   close: string;
   switchLanguage: string;
   hero: { kicker: string; title1: string; title2: string; description: string; button: string; secondary: string; flourish: string; scroll: string; layered: string };
-  work: { eyebrow: string; title: string; description: string; more: string; challenge: string; approach: string; details: string; features: string; projects: readonly Project[] };
+  work: { eyebrow: string; title: string; description: string; more: string; challenge: string; approach: string; details: string; features: string; projects: readonly Project[]; showMore: string; showLess: string; projectCount: string; additionalProjects: string; enterpriseTitle: string; enterpriseDescription: string; enterpriseProjects: readonly Project[]; inProgress: string; inProgressDescription: string; inProgressProjects: readonly Project[] };
   about: { eyebrow: string; title1: string; title2: string; lead: string; quote: string; quoteBy: string; values: readonly { index: string; title: string; body: string }[] };
   stack: { eyebrow: string; title: string; description: string; main: string; toolbox: string; build: string; mainSkills: readonly string[]; extras: readonly string[] };
   sound: { eyebrow: string; title1: string; title2: string; description: string; genre: string; awaiting: string; comingSoon: string; placeholder: string; playlistNote: string; openOnSoundCloud: string; playerTitle: string };
@@ -48,62 +49,396 @@ export const profile = {
 
 const projectsEn: readonly Project[] = [
   {
-    id: "finance", index: "01", title: "Finance Automation Engine", kicker: "SYSTEMS / AUTOMATION",
-    summary: "Bridging operational data and financial workflows — with guardrails that make every step traceable.",
-    stack: ["Python", "PostgreSQL", "REST APIs", "Integration"],
-    challenge: "Complex handoffs between source operations and financial registration can introduce uncertainty and manual work.",
-    approach: "Separate ingestion, mapping policies, validation, registrations, and reconciliation into clear, testable stages.",
-    detail: "A policy-aware integration concept connecting operational records to financial registration with explicit state, retries, and review paths.",
-    features: ["Policy-driven mapping", "Safe registration flow", "Retries & reconciliation", "Traceable outcomes"],
+    "id": "finance",
+    "index": "01",
+    "title": "Finance Automation Engine",
+    "kicker": "SYSTEMS / AUTOMATION",
+    "summary": "Bridging operational data and financial workflows — with guardrails that make every step traceable.",
+    "stack": [
+      "Python",
+      "PostgreSQL",
+      "REST APIs",
+      "Integration"
+    ],
+    "challenge": "Complex handoffs between source operations and financial registration can introduce uncertainty and manual work.",
+    "approach": "Separate ingestion, mapping policies, validation, registrations, and reconciliation into clear, testable stages.",
+    "detail": "A policy-aware integration service connecting operational records to financial registration with explicit state, retries, and review paths.",
+    "features": [
+      "Policy-driven mapping",
+      "Safe registration flow",
+      "Retries & reconciliation",
+      "Traceable outcomes"
+    ]
   },
   {
-    id: "logistics", index: "02", title: "Chapar Operational Portal", kicker: "PRODUCT / OPERATIONS",
-    summary: "Making complex logistics operations feel clear, fast, and manageable.",
-    stack: ["React", "TypeScript", "MUI", "TanStack Query"],
-    challenge: "Operations teams need to navigate orders, vehicles, customers, and workflows without losing context.",
-    approach: "Design modular screens, reusable form controls, predictable data handling, and thoughtful right-to-left interfaces.",
-    detail: "An operational interface spanning logistics workflows, rich forms, server-driven tables, and consistent navigation patterns.",
-    features: ["Reusable design patterns", "Server-driven data grids", "Complex validation", "RTL-first interactions"],
+    "id": "rail",
+    "title": "PTB Rail",
+    "kicker": "LOGISTICS / RAIL",
+    "summary": "Rail tariffs, quotations and shipment tracking in one operational workflow.",
+    "stack": [
+      "Python",
+      "Django",
+      "PostgreSQL"
+    ],
+    "challenge": "Rail quotations and shipment updates need consistent information from pricing through delivery.",
+    "approach": "Bring tariff management, inquiry pricing, PDF quotations and shipment history together with structured imports.",
+    "detail": "A rail operations project covering tariff and inquiry management, quotation documents, and shipment tracking with location history and optional ETA.",
+    "features": [
+      "Tariff management",
+      "Inquiry pricing & PDF quotations",
+      "Shipment tracking history",
+      "Excel import / export"
+    ],
+    "index": "02"
   },
   {
-    id: "documents", index: "03", title: "Document Management", kicker: "PLATFORM / ARCHITECTURE",
-    summary: "A structured home for documents, access rules, and the information people depend on.",
-    stack: ["React", "TypeScript", "Permissions", "UX Systems"],
-    challenge: "Information becomes hard to trust when ownership, access, and document state are unclear.",
-    approach: "Organize the interface around roles, organizational structures, classification, and transparent document states.",
-    detail: "A document-centric workspace concept built around structured discovery, permission-aware views, and traceable activity.",
-    features: ["Role-aware access", "Organizational hierarchy", "Document classification", "Clear information architecture"],
+    "id": "newsletter",
+    "title": "NewsLetter",
+    "kicker": "ENTERPRISE / COMMUNICATION",
+    "summary": "An internal newsletter platform with preparation, approval and controlled email delivery.",
+    "stack": [
+      "Python",
+      "Django",
+      "PostgreSQL"
+    ],
+    "challenge": "Internal communications need clear ownership, audience management and an approval step before delivery.",
+    "approach": "Separate preparation, managerial approval and delivery, with role-based access and reusable contact imports.",
+    "detail": "An internal newsletter application covering content preparation, manager approval, contact imports, attachments and multilingual unsubscribe pages, integrated with the organization’s email environment.",
+    "features": [
+      "Role-based preparation & approval",
+      "Contact imports & audience management",
+      "Attachment support",
+      "Multilingual unsubscribe pages"
+    ],
+    "index": "03"
   },
+  {
+    "id": "aircargo",
+    "title": "AirCargo",
+    "kicker": "LOGISTICS / AIR CARGO",
+    "summary": "Software project work in the air cargo domain.",
+    "stack": [],
+    "detail": "AirCargo is part of my software project work in air freight and logistics.",
+    "features": [
+      "Air cargo",
+      "Logistics software"
+    ],
+    "index": "04"
+  },
+  {
+    "id": "zixo",
+    "title": "Zixo Bot",
+    "kicker": "CRYPTO / AUTOMATION",
+    "summary": "A cryptocurrency trading bot focused on trading automation.",
+    "stack": [],
+    "detail": "Zixo Bot is a crypto trading bot project focused on automated trading workflows.",
+    "features": [
+      "Cryptocurrency trading",
+      "Trading automation"
+    ],
+    "index": "05"
+  },
+  {
+    "id": "walliro",
+    "title": "Crypto-Walliro",
+    "kicker": "CRYPTO / MULTI-SIGNATURE",
+    "summary": "A multi-signature cryptocurrency wallet with shared transaction approval.",
+    "stack": [],
+    "detail": "Crypto-Walliro is a multi-signature wallet project centered on transactions that require approval from multiple signers.",
+    "features": [
+      "Multi-signature wallet",
+      "Shared transaction approval"
+    ],
+    "index": "06"
+  },
+  {
+    "id": "logistics",
+    "index": "07",
+    "title": "Chapar Operational Portal — V2",
+    "kicker": "PRODUCT / OPERATIONS",
+    "summary": "Making complex logistics operations feel clear, fast, and manageable.",
+    "stack": [
+      "React",
+      "TypeScript",
+      "MUI",
+      "TanStack Query"
+    ],
+    "challenge": "Operations teams need to navigate orders, vehicles, customers, and workflows without losing context.",
+    "approach": "Design modular screens, reusable form controls, predictable data handling, and thoughtful right-to-left interfaces.",
+    "detail": "An operational interface spanning logistics workflows, rich forms, server-driven tables, and consistent navigation patterns.",
+    "features": [
+      "Reusable design patterns",
+      "Server-driven data grids",
+      "Complex validation",
+      "RTL-first interactions"
+    ]
+  },
+  {
+    "id": "documents",
+    "index": "08",
+    "title": "EDMS / Document Management",
+    "kicker": "PLATFORM / ARCHITECTURE",
+    "summary": "A structured home for documents, access rules, and the information people depend on.",
+    "stack": [
+      "React",
+      "TypeScript",
+      "Permissions",
+      "UX Systems"
+    ],
+    "challenge": "Information becomes hard to trust when ownership, access, and document state are unclear.",
+    "approach": "Organize the interface around roles, organizational structures, classification, and transparent document states.",
+    "detail": "A document-centric workspace concept built around structured discovery, permission-aware views, and traceable activity.",
+    "features": [
+      "Role-aware access",
+      "Organizational hierarchy",
+      "Document classification",
+      "Clear information architecture"
+    ]
+  }
 ];
 
 const projectsFa: readonly Project[] = [
   {
-    id: "finance", index: "۰۱", title: "موتور اتوماسیون مالی", kicker: "سیستم‌ها / اتوماسیون",
-    summary: "اتصال داده‌های عملیاتی به فرایندهای مالی، با کنترل‌هایی که هر مرحله را قابل پیگیری نگه می‌دارند.",
-    stack: ["Python", "PostgreSQL", "REST APIs", "Integration"],
-    challenge: "انتقال اطلاعات بین عملیات و ثبت مالی، بدون کنترل مناسب، می‌تواند ابهام و کار دستی زیادی ایجاد کند.",
-    approach: "تفکیک دریافت داده، سیاست‌های نگاشت، اعتبارسنجی، ثبت و مغایرت‌گیری به مراحل روشن و قابل آزمون.",
-    detail: "یک مسیر یکپارچه‌سازی مبتنی بر سیاست برای اتصال رکوردهای عملیاتی به ثبت مالی، همراه با وضعیت‌های مشخص و فرایند رسیدگی.",
-    features: ["نگاشت مبتنی بر سیاست", "مسیر ثبت ایمن", "تلاش مجدد و مغایرت‌گیری", "نتایج قابل ردیابی"],
+    "id": "finance",
+    "index": "۰۱",
+    "title": "موتور اتوماسیون مالی",
+    "kicker": "سیستم‌ها / اتوماسیون",
+    "summary": "اتصال داده‌های عملیاتی به فرایندهای مالی، با کنترل‌هایی که هر مرحله را قابل پیگیری نگه می‌دارند.",
+    "stack": [
+      "Python",
+      "PostgreSQL",
+      "REST APIs",
+      "Integration"
+    ],
+    "challenge": "انتقال اطلاعات بین عملیات و ثبت مالی، بدون کنترل مناسب، می‌تواند ابهام و کار دستی زیادی ایجاد کند.",
+    "approach": "تفکیک دریافت داده، سیاست‌های نگاشت، اعتبارسنجی، ثبت و مغایرت‌گیری به مراحل روشن و قابل آزمون.",
+    "detail": "یک مسیر یکپارچه‌سازی مبتنی بر سیاست برای اتصال رکوردهای عملیاتی به ثبت مالی، همراه با وضعیت‌های مشخص و فرایند رسیدگی.",
+    "features": [
+      "نگاشت مبتنی بر سیاست",
+      "مسیر ثبت ایمن",
+      "تلاش مجدد و مغایرت‌گیری",
+      "نتایج قابل ردیابی"
+    ]
   },
   {
-    id: "logistics", index: "۰۲", title: "پرتال عملیاتی چاپار", kicker: "محصول / عملیات",
-    summary: "تبدیل عملیات پیچیدهٔ لجستیک به تجربه‌ای روشن، سریع و قابل مدیریت.",
-    stack: ["React", "TypeScript", "MUI", "TanStack Query"],
-    challenge: "تیم عملیات باید سفارش‌ها، وسایل نقلیه، مشتریان و فرایندها را بدون گم‌کردن زمینه مدیریت کند.",
-    approach: "طراحی صفحات ماژولار، کنترل‌های فرم قابل استفادهٔ مجدد و رفتارهای داده‌ای پیش‌بینی‌پذیر با پشتیبانی از RTL.",
-    detail: "رابطی برای گردش‌کارهای لجستیک با فرم‌های پیشرفته، جدول‌های مبتنی بر سرور و الگوهای ناوبری یکپارچه.",
-    features: ["الگوهای طراحی قابل‌استفادهٔ مجدد", "جدول‌های دادهٔ سمت سرور", "اعتبارسنجی پیچیده", "تعاملات راست‌به‌چپ"],
+    "id": "rail",
+    "title": "PTB Rail",
+    "kicker": "لجستیک / حمل ریلی",
+    "summary": "مدیریت تعرفه، صدور پیشنهاد قیمت و رهگیری محموله‌های ریلی در یک مسیر عملیاتی.",
+    "stack": [
+      "Python",
+      "Django",
+      "PostgreSQL"
+    ],
+    "challenge": "قیمت‌گذاری حمل ریلی و پیگیری محموله به اطلاعات منسجم از مرحلهٔ استعلام تا تحویل نیاز دارند.",
+    "approach": "کنار هم قرار دادن تعرفه‌ها، محاسبهٔ استعلام، پیشنهاد قیمت PDF و تاریخچهٔ محموله با ورود ساختارمند اطلاعات.",
+    "detail": "پروژه‌ای برای عملیات حمل ریلی شامل مدیریت تعرفه و استعلام، تولید پیشنهاد قیمت و رهگیری محموله با تاریخچهٔ موقعیت و زمان تقریبی رسیدن.",
+    "features": [
+      "مدیریت تعرفه‌ها",
+      "استعلام و پیشنهاد قیمت PDF",
+      "تاریخچهٔ رهگیری محموله",
+      "ورود و خروج اطلاعات Excel"
+    ],
+    "index": "۰۲"
   },
   {
-    id: "documents", index: "۰۳", title: "سامانهٔ مدیریت مستندات", kicker: "پلتفرم / معماری",
-    summary: "خانه‌ای ساختارمند برای اسناد، مجوزهای دسترسی و اطلاعات مهم سازمان.",
-    stack: ["React", "TypeScript", "Permissions", "UX Systems"],
-    challenge: "وقتی مالکیت، دسترسی و وضعیت مدارک روشن نباشد، اعتماد به اطلاعات دشوار می‌شود.",
-    approach: "سازمان‌دهی رابط براساس نقش کاربران، چارت سازمانی، طبقه‌بندی و وضعیت شفاف مدارک.",
-    detail: "فضای کاری متمرکز بر اسناد، با کشف ساختارمند، نمایش متناسب با مجوزها و فعالیت قابل پیگیری.",
-    features: ["دسترسی مبتنی بر نقش", "چارت سازمانی", "طبقه‌بندی مدارک", "معماری اطلاعات روشن"],
+    "id": "newsletter",
+    "title": "NewsLetter",
+    "kicker": "سازمانی / ارتباطات",
+    "summary": "سامانهٔ خبرنامهٔ داخلی با آماده‌سازی محتوا، تأیید مدیر و ارسال کنترل‌شدهٔ ایمیل.",
+    "stack": [
+      "Python",
+      "Django",
+      "PostgreSQL"
+    ],
+    "challenge": "ارتباطات داخلی به مسئولیت مشخص، مدیریت مخاطبان و تأیید محتوا پیش از ارسال نیاز دارد.",
+    "approach": "تفکیک آماده‌سازی، تأیید مدیر و ارسال، با دسترسی مبتنی بر نقش و ورود قابل‌استفادهٔ مجدد مخاطبان.",
+    "detail": "سامانهٔ خبرنامهٔ داخلی برای آماده‌سازی محتوا، تأیید مدیر، ورود مخاطبان، پیوست‌ها و صفحات چندزبانهٔ لغو اشتراک، با اتصال به محیط ایمیل سازمان.",
+    "features": [
+      "آماده‌سازی و تأیید مبتنی بر نقش",
+      "ورود و مدیریت مخاطبان",
+      "پشتیبانی از پیوست",
+      "لغو اشتراک چندزبانه"
+    ],
+    "index": "۰۳"
   },
+  {
+    "id": "aircargo",
+    "title": "AirCargo",
+    "kicker": "لجستیک / حمل هوایی",
+    "summary": "پروژهٔ نرم‌افزاری در حوزهٔ حمل‌ونقل بار هوایی.",
+    "stack": [],
+    "detail": "AirCargo بخشی از تجربهٔ پروژه‌های نرم‌افزاری من در حوزهٔ حمل بار هوایی و لجستیک است.",
+    "features": [
+      "حمل بار هوایی",
+      "نرم‌افزار لجستیک"
+    ],
+    "index": "۰۴"
+  },
+  {
+    "id": "zixo",
+    "title": "Zixo Bot",
+    "kicker": "رمزارز / اتوماسیون",
+    "summary": "ربات معاملات رمزارز با تمرکز بر خودکارسازی فرایند معامله.",
+    "stack": [],
+    "detail": "Zixo Bot پروژهٔ ربات معاملات رمزارز با تمرکز بر گردش‌کارهای معاملاتی خودکار است.",
+    "features": [
+      "معاملات رمزارز",
+      "خودکارسازی معاملات"
+    ],
+    "index": "۰۵"
+  },
+  {
+    "id": "walliro",
+    "title": "Crypto-Walliro",
+    "kicker": "رمزارز / چندامضایی",
+    "summary": "کیف پول رمزارزی چندامضایی برای تأیید مشترک تراکنش‌ها.",
+    "stack": [],
+    "detail": "Crypto-Walliro پروژهٔ کیف پول چندامضایی است که تراکنش‌های آن به تأیید چند امضاکننده نیاز دارند.",
+    "features": [
+      "کیف پول چندامضایی",
+      "تأیید مشترک تراکنش"
+    ],
+    "index": "۰۶"
+  },
+  {
+    "id": "logistics",
+    "index": "۰۷",
+    "title": "پرتال عملیاتی چاپار — V2",
+    "kicker": "محصول / عملیات",
+    "summary": "تبدیل عملیات پیچیدهٔ لجستیک به تجربه‌ای روشن، سریع و قابل مدیریت.",
+    "stack": [
+      "React",
+      "TypeScript",
+      "MUI",
+      "TanStack Query"
+    ],
+    "challenge": "تیم عملیات باید سفارش‌ها، وسایل نقلیه، مشتریان و فرایندها را بدون گم‌کردن زمینه مدیریت کند.",
+    "approach": "طراحی صفحات ماژولار، کنترل‌های فرم قابل استفادهٔ مجدد و رفتارهای داده‌ای پیش‌بینی‌پذیر با پشتیبانی از RTL.",
+    "detail": "رابطی برای گردش‌کارهای لجستیک با فرم‌های پیشرفته، جدول‌های مبتنی بر سرور و الگوهای ناوبری یکپارچه.",
+    "features": [
+      "الگوهای طراحی قابل‌استفادهٔ مجدد",
+      "جدول‌های دادهٔ سمت سرور",
+      "اعتبارسنجی پیچیده",
+      "تعاملات راست‌به‌چپ"
+    ]
+  },
+  {
+    "id": "documents",
+    "index": "۰۸",
+    "title": "EDMS / مدیریت مستندات",
+    "kicker": "پلتفرم / معماری",
+    "summary": "خانه‌ای ساختارمند برای اسناد، مجوزهای دسترسی و اطلاعات مهم سازمان.",
+    "stack": [
+      "React",
+      "TypeScript",
+      "Permissions",
+      "UX Systems"
+    ],
+    "challenge": "وقتی مالکیت، دسترسی و وضعیت مدارک روشن نباشد، اعتماد به اطلاعات دشوار می‌شود.",
+    "approach": "سازمان‌دهی رابط براساس نقش کاربران، چارت سازمانی، طبقه‌بندی و وضعیت شفاف مدارک.",
+    "detail": "فضای کاری متمرکز بر اسناد، با کشف ساختارمند، نمایش متناسب با مجوزها و فعالیت قابل پیگیری.",
+    "features": [
+      "دسترسی مبتنی بر نقش",
+      "چارت سازمانی",
+      "طبقه‌بندی مدارک",
+      "معماری اطلاعات روشن"
+    ]
+  }
+];
+
+
+const enterpriseEn: readonly Project[] = [
+{
+  "id": "pms",
+  "index": "PMS",
+  "title": "Project Management System",
+  "kicker": "ENTERPRISE / PMS",
+  "summary": "Enterprise project management systems.",
+  "stack": [],
+  "detail": "My enterprise experience includes work on Project Management System (PMS) projects.",
+  "features": [
+    "Project management",
+    "Enterprise systems"
+  ]
+},
+{
+  "id": "tms",
+  "index": "TMS",
+  "title": "Tracking Management System",
+  "kicker": "ENTERPRISE / TMS",
+  "summary": "Tracking management in enterprise software.",
+  "stack": [],
+  "detail": "My enterprise experience includes work on Tracking Management System (TMS) projects.",
+  "features": [
+    "Tracking management",
+    "Enterprise systems"
+  ]
+},
+  projectsEn.find(project => project.id === "documents")!,
+];
+const inProgressEn: readonly Project[] = [
+  {
+    "id": "ims",
+    "index": "IMS",
+    "title": "IMS — Integrated Management System",
+    "kicker": "ENTERPRISE / IN PROGRESS",
+    "summary": "An Integrated Management System currently in development.",
+    "stack": [],
+    "detail": "An Integrated Management System (IMS) project currently in progress.",
+    "features": [
+      "Integrated Management System",
+      "In progress"
+    ],
+    "stage": "in-progress"
+  }
+];
+
+
+const enterpriseFa: readonly Project[] = [
+{
+  "id": "pms",
+  "index": "PMS",
+  "title": "سامانهٔ مدیریت پروژه",
+  "kicker": "سازمانی / PMS",
+  "summary": "تجربهٔ کار روی سامانه‌های مدیریت پروژهٔ سازمانی.",
+  "stack": [],
+  "detail": "بخشی از تجربهٔ سازمانی من، کار روی پروژه‌های Project Management System یا PMS است.",
+  "features": [
+    "مدیریت پروژه",
+    "سامانه‌های سازمانی"
+  ]
+},
+{
+  "id": "tms",
+  "index": "TMS",
+  "title": "سامانهٔ مدیریت رهگیری",
+  "kicker": "سازمانی / TMS",
+  "summary": "تجربهٔ کار روی سامانه‌های مدیریت رهگیری.",
+  "stack": [],
+  "detail": "بخشی از تجربهٔ سازمانی من، کار روی پروژه‌های Tracking Management System یا TMS است.",
+  "features": [
+    "مدیریت رهگیری",
+    "سامانه‌های سازمانی"
+  ]
+},
+  projectsFa.find(project => project.id === "documents")!,
+];
+const inProgressFa: readonly Project[] = [
+  {
+    "id": "ims",
+    "index": "IMS",
+    "title": "IMS — سامانهٔ مدیریت یکپارچه",
+    "kicker": "سازمانی / در حال توسعه",
+    "summary": "پروژهٔ Integrated Management System که در حال توسعه است.",
+    "stack": [],
+    "detail": "پروژهٔ سامانهٔ مدیریت یکپارچه، Integrated Management System یا IMS، در حال توسعه است.",
+    "features": [
+      "سامانهٔ مدیریت یکپارچه",
+      "در حال توسعه"
+    ],
+    "stage": "in-progress"
+  }
 ];
 
 export const copy: Record<Locale, Copy> = {
@@ -116,7 +451,7 @@ export const copy: Record<Locale, Copy> = {
       description: "I'm Amirhossein Hajilari — Lary. I build thoughtful digital experiences, untangle complex systems, and believe that every layer reveals a little more.",
       button: "Explore my work", secondary: "Meet Lary", flourish: "A SPACE TO BECOME", scroll: "SCROLL TO REVEAL", layered: "A little more of me, with every layer.",
     },
-    work: { eyebrow: "01 / THE WORK", title: "Ideas, brought to life.", description: "A few of the problems I've spent time understanding — and the systems shaped around them.", more: "Inside the build", challenge: "The challenge", approach: "The approach", details: "Project snapshot", features: "Engineering focus", projects: projectsEn },
+    work: { eyebrow: "01 / THE WORK", title: "Ideas, brought to life.", description: "A few of the problems I've spent time understanding — and the systems shaped around them.", more: "Inside the build", challenge: "The challenge", approach: "The approach", details: "Project snapshot", features: "Project focus", projects: projectsEn, showMore: "Show more projects", showLess: "Show less", projectCount: "Showing {visible} of {total} selected projects", additionalProjects: "More projects", enterpriseTitle: "Enterprise experience", enterpriseDescription: "My enterprise work also includes PMS, TMS and EDMS projects.", inProgress: "In progress", inProgressDescription: "Projects currently taking shape.", enterpriseProjects: enterpriseEn, inProgressProjects: inProgressEn },
     about: {
       eyebrow: "02 / THE STORY", title1: "Beyond the", title2: "shell.",
       lead: "Growth isn't always about adding more. Sometimes, it's about shedding what no longer fits — and making room for what's already there.",
@@ -154,7 +489,7 @@ export const copy: Record<Locale, Copy> = {
       description: "من امیرحسین حاجی‌لری هستم؛ لری. تجربه‌های دیجیتال می‌سازم، پیچیدگی سیستم‌ها را باز می‌کنم و باور دارم هر لایه، بخش تازه‌ای از ما را آشکار می‌کند.",
       button: "دیدن نمونه‌کارها", secondary: "آشنایی با من", flourish: "فضایی برای شکفتن", scroll: "اسکرول کن تا آشکار شود", layered: "با هر لایه، بخش دیگری از من.",
     },
-    work: { eyebrow: "۰۱ / نمونه‌کارها", title: "ایده‌ها، در دنیای واقعی.", description: "چند مسئله که برای فهمیدنشان وقت گذاشته‌ام؛ و سیستم‌هایی که برای حلشان شکل داده‌ام.", more: "پشت صحنهٔ ساخت", challenge: "چالش", approach: "رویکرد", details: "نگاهی به پروژه", features: "تمرکز مهندسی", projects: projectsFa },
+    work: { eyebrow: "۰۱ / نمونه‌کارها", title: "ایده‌ها، در دنیای واقعی.", description: "چند مسئله که برای فهمیدنشان وقت گذاشته‌ام؛ و سیستم‌هایی که برای حلشان شکل داده‌ام.", more: "پشت صحنهٔ ساخت", challenge: "چالش", approach: "رویکرد", details: "نگاهی به پروژه", features: "حوزهٔ پروژه", projects: projectsFa, showMore: "نمایش پروژه‌های بیشتر", showLess: "نمایش کمتر", projectCount: "نمایش {visible} از {total} پروژهٔ منتخب", additionalProjects: "پروژه‌های بیشتر", enterpriseTitle: "تجربه در سامانه‌های سازمانی", enterpriseDescription: "تجربهٔ سازمانی من شامل کار روی پروژه‌های PMS، TMS و EDMS هم می‌شود.", inProgress: "در حال توسعه", inProgressDescription: "پروژه‌هایی که در حال توسعه‌اند.", enterpriseProjects: enterpriseFa, inProgressProjects: inProgressFa },
     about: {
       eyebrow: "۰۲ / داستان من", title1: "آن‌سوی", title2: "پوسته.",
       lead: "رشد همیشه به معنای اضافه‌کردن نیست. گاهی باید آنچه دیگر اندازهٔ ما نیست را کنار بگذاریم تا برای آنچه حقیقتاً هستیم جا باز شود.",

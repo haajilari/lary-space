@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { Copy, Project } from "@/content/site";
 import { CloseIcon } from "./Icons";
+import ProjectArtwork from "./ProjectArtwork";
 
 export default function ProjectModal({ project, copy, onClose }: { project: Project; copy: Copy; onClose: () => void }) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -28,13 +29,14 @@ export default function ProjectModal({ project, copy, onClose }: { project: Proj
   }, []);
   return (
     <div className="modal-backdrop" onMouseDown={e => { if (e.currentTarget === e.target) onClose(); }}>
-      <div className="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" ref={modalRef}>
+      <div className="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-summary" ref={modalRef}>
         <div className="modal-header"><span className="eyebrow">{project.index} / {project.kicker}</span><button type="button" className="icon-circle dark" onClick={onClose} ref={buttonRef} aria-label={copy.modal.close}><CloseIcon /></button></div>
-        <div className={`project-visual project-visual-${project.id}`} aria-hidden="true"><span className="visual-grid" /><span className="visual-glyph">{project.id === "finance" ? "⟡" : project.id === "logistics" ? "↗" : "▧"}</span></div>
-        <h2 id="modal-title">{project.title}</h2>
-        <p className="modal-summary">{project.detail}</p>
-        <div className="modal-feature-grid"><div><h3>{copy.work.challenge}</h3><p>{project.challenge}</p></div><div><h3>{copy.work.approach}</h3><p>{project.approach}</p></div></div>
-        <div className="modal-detail-bottom"><div><span className="eyebrow">{copy.work.features}</span><div className="feature-lines">{project.features.map(f => <span key={f}>{f}</span>)}</div></div><div className="modal-tags">{project.stack.map(s => <span key={s}>{s}</span>)}</div></div>
+        <div className={`project-visual project-visual-${project.id}`} aria-hidden="true"><span className="visual-grid"/><ProjectArtwork id={project.id}/></div>
+        {project.stage === "in-progress" ? <span className="project-stage modal-stage"><span aria-hidden="true"/>{copy.work.inProgress}</span> : null}
+        <h2 id="modal-title" dir="auto">{project.title}</h2>
+        <p id="modal-summary" className="modal-summary">{project.detail}</p>
+        {project.challenge || project.approach ? <div className="modal-feature-grid">{project.challenge ? <div><h3>{copy.work.challenge}</h3><p>{project.challenge}</p></div> : null}{project.approach ? <div><h3>{copy.work.approach}</h3><p>{project.approach}</p></div> : null}</div> : null}
+        <div className="modal-detail-bottom"><div><span className="eyebrow">{copy.work.features}</span><div className="feature-lines">{project.features.map(f => <span key={f}>{f}</span>)}</div></div>{project.stack.length ? <div className="modal-tags">{project.stack.map(s => <span key={s}>{s}</span>)}</div> : null}</div>
       </div>
     </div>
   );

@@ -77,7 +77,10 @@ The compatibility scanner reports support for all Next.js imports used by this p
 - Scroll-driven, reversible egg-shell emergence; side fragments move first, upper/lower shell last
 - Apple-inspired gentle section fade on entrance/exit; reduced-motion preference respected
 - Fixed desktop section roadmap, compact mobile navigation, functional anchor navigation
-- Three portfolio project cards with accessible case-study dialogs (Escape and focus handling)
+- Eight selected project cards: Finance Automation Engine, PTB Rail, NewsLetter, AirCargo, Zixo Bot, Crypto-Walliro, Chapar Operational Portal — V2 and EDMS / Document Management
+- Three featured cards, an accessible Show more / Show less control for five additional projects, and localized counts
+- Always-visible enterprise entries for PMS (Project Management System), TMS (Tracking Management System) and EDMS, plus a separate In progress list containing IMS (Integrated Management System)
+- Project and enterprise entries open accessible detail dialogs with Escape, keyboard focus containment and focus restoration
 - Soundspace connected to Lary's public SoundCloud playlist, with an inline player and track list inside the page, localized labels and a direct SoundCloud link
 - Contact dialog from the desktop/mobile navigation, section roadmap and contact buttons, with WhatsApp, email and LinkedIn choices; Escape, backdrop dismissal, keyboard focus containment and focus restoration
 - Real `mailto:` and GitHub links, copy-email action using `amirhossein.hajilari@gmail.com`
@@ -114,7 +117,11 @@ For LinkedIn, paste the exact URL obtained from the owner's **Message** button i
 
 ## Project descriptions
 
-The work examples are intentionally **high-level editorial snapshots**, rather than claims of measured results or production secrets. Confirm names, details, screenshots, and disclosure rights before publishing publicly.
+The gallery content is maintained in `content/site.ts` for both languages. `work.projects` controls the ordered selected-project list; the first three are featured and the rest appear through Show more. Enterprise entries are in `work.enterpriseProjects`; in-progress entries are in `work.inProgressProjects` and carry `stage: "in-progress"`. IMS is listed only in progress, never among the eight selected project cards.
+
+PMS means **Project Management System**, TMS means **Tracking Management System**, and IMS means **Integrated Management System**, as specified by the owner. Enterprise entries describe project experience without claiming sole ownership. Newsletter and rail summaries use the supplied project history. AirCargo, Zixo Bot and Crypto-Walliro use concise descriptions of the owner-supplied project domains; no unverified frameworks, chains, exchanges, performance metrics or security audits are added. Their optional challenge, approach and technology tags can be filled in once those details are supplied.
+
+Each selected project has a unique stable ID and matching content in both languages. The project count comes from the actual arrays. Additional cards are hidden from keyboard and accessibility navigation until expanded. The enterprise and in-progress lists remain visible in either state.
 
 ## Remaining review items
 
