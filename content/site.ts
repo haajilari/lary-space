@@ -22,7 +22,7 @@ export type Copy = {
   work: { eyebrow: string; title: string; description: string; more: string; challenge: string; approach: string; details: string; features: string; projects: readonly Project[] };
   about: { eyebrow: string; title1: string; title2: string; lead: string; quote: string; quoteBy: string; values: readonly { index: string; title: string; body: string }[] };
   stack: { eyebrow: string; title: string; description: string; main: string; toolbox: string; build: string; mainSkills: readonly string[]; extras: readonly string[] };
-  sound: { eyebrow: string; title1: string; title2: string; description: string; genre: string; awaiting: string; comingSoon: string; play: string; closePlayer: string; placeholder: string };
+  sound: { eyebrow: string; title1: string; title2: string; description: string; genre: string; awaiting: string; comingSoon: string; play: string; closePlayer: string; placeholder: string; playlistNote: string; openOnSoundCloud: string; playerTitle: string };
   contact: { eyebrow: string; title1: string; title2: string; description: string; email: string; copy: string; copied: string; github: string; made: string; rights: string; dialogTitle: string; dialogDescription: string };
   modal: { close: string };
 };
@@ -41,8 +41,9 @@ export const profile = {
   // Paste the exact link from LinkedIn's Message button when available.
   // The verified profile is the fallback; do not invent a member URN.
   linkedinMessageUrl: "",
-  // Add a *public* SoundCloud track/playlist URL to activate the floating audio player.
-  soundcloudUrl: "",
+  // Direct public playlist URL resolved from the owner's SoundCloud share link.
+  soundcloudUrl: "https://soundcloud.com/amir-hossein-hajilari/sets/keep-your-anger-for-better",
+  soundcloudTitle: "Keep your anger, For better reason! :)",
 } as const;
 
 const projectsEn: readonly Project[] = [
@@ -134,7 +135,8 @@ export const copy: Record<Locale, Copy> = {
     sound: {
       eyebrow: "04 / SOUNDSPACE", title1: "A different", title2: "frequency.",
       description: "There's more to a person than their work. Here's a small window into the sounds that travel with me.", genre: "THE SOUNDTRACK TO MY SPACE", awaiting: "The playlist is taking shape.",
-      comingSoon: "A SoundCloud track or playlist can be connected here without changing the design.", play: "Open the player", closePlayer: "Close player", placeholder: "SOMETHING IS COMING TO LIFE",
+      comingSoon: "A SoundCloud track or playlist can be connected here without changing the design.", play: "Open the playlist", closePlayer: "Close player", placeholder: "SOMETHING IS COMING TO LIFE",
+      playlistNote: "A little of what I listen to, collected in one place.", openOnSoundCloud: "Listen on SoundCloud", playerTitle: "LarySpace SoundCloud playlist",
     },
     contact: {
       eyebrow: "05 / CONNECT", title1: "Let's make", title2: "something matter.", description: "A new idea, a difficult problem, or just a good conversation — my inbox is open.",
@@ -171,7 +173,8 @@ export const copy: Record<Locale, Copy> = {
     sound: {
       eyebrow: "۰۴ / فضای موسیقی", title1: "در فرکانسی", title2: "دیگر.",
       description: "آدم‌ها فقط با کارشان شناخته نمی‌شوند. اینجا پنجرهٔ کوچکی است به موسیقی‌هایی که با من همراه‌اند.", genre: "موسیقیِ فضای من", awaiting: "پلی‌لیست هنوز در حال شکل‌گیری است.",
-      comingSoon: "می‌توانیم یک ترک یا پلی‌لیست SoundCloud را بدون تغییر طراحی به این قسمت وصل کنیم.", play: "بازکردن پلیر", closePlayer: "بستن پلیر", placeholder: "چیزی در حال شکل‌گرفتن است",
+      comingSoon: "می‌توانیم یک ترک یا پلی‌لیست SoundCloud را بدون تغییر طراحی به این قسمت وصل کنیم.", play: "بازکردن پلی‌لیست", closePlayer: "بستن پلیر", placeholder: "چیزی در حال شکل‌گرفتن است",
+      playlistNote: "بخشی از موسیقی‌هایی که گوش می‌دهم؛ جمع‌شده در یک پلی‌لیست.", openOnSoundCloud: "شنیدن در SoundCloud", playerTitle: "پلی‌لیست لری‌اسپیس در SoundCloud",
     },
     contact: {
       eyebrow: "۰۵ / ارتباط", title1: "بیایید چیزی", title2: "ماندگار بسازیم.", description: "یک ایدهٔ تازه، مسئله‌ای پیچیده یا حتی یک گفت‌وگوی خوب؛ خوشحال می‌شوم از تو بشنوم.",
