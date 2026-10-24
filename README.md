@@ -14,6 +14,7 @@ Open **http://localhost:3000** (redirects to `/en`). The Persian version is **ht
 Production build:
 
 ```bash
+node node_modules/next/dist/bin/next typegen
 npm run typecheck
 npm run build
 npm start
@@ -27,6 +28,7 @@ Use Node.js 22.12+; `.nvmrc` selects Node 24 for Cloudflare Builds and local ver
 
 ```bash
 npm ci
+node node_modules/next/dist/bin/next typegen
 npm run typecheck
 npm run build:vinext
 npm run check:worker
@@ -34,6 +36,8 @@ npm run check:deploy
 ```
 
 `check:worker` validates the built Worker with Wrangler's dry run. `check:deploy` validates the vinext deployment command without uploading or publishing.
+
+Next.js and vinext both generate `.next/types/routes.d.ts` with different shapes. Before a standalone `typecheck`, run `node node_modules/next/dist/bin/next typegen` to regenerate matching Next.js route and validator types, especially after a vinext build. The patch installer does this before validation and once more after the Worker checks.
 
 The project uses vinext 1.3.0 with its supported Wrangler integration, the Cloudflare Vite plugin and `wrangler.jsonc`. The Worker is named `lary-space`; its generated deploy configuration is `dist/server/wrangler.json`. The original Next.js development/build scripts remain available alongside `dev:vinext`, `build:vinext` and `start:vinext`.
 
@@ -74,7 +78,7 @@ The compatibility scanner reports support for all Next.js imports used by this p
 - Apple-inspired gentle section fade on entrance/exit; reduced-motion preference respected
 - Fixed desktop section roadmap, compact mobile navigation, functional anchor navigation
 - Three portfolio project cards with accessible case-study dialogs (Escape and focus handling)
-- Soundspace connected to Lary's public SoundCloud playlist, with a playlist-sized floating widget, localized controls, keyboard open/close behavior and a direct SoundCloud link
+- Soundspace connected to Lary's public SoundCloud playlist, with an inline player and track list inside the page, localized labels and a direct SoundCloud link
 - Contact dialog from the desktop/mobile navigation, section roadmap and contact buttons, with WhatsApp, email and LinkedIn choices; Escape, backdrop dismissal, keyboard focus containment and focus restoration
 - Real `mailto:` and GitHub links, copy-email action using `amirhossein.hajilari@gmail.com`
 - Self-hosted Vazirmatn variable font, including the Persian language-switch label on the English page
@@ -100,7 +104,7 @@ export const profile = {
 
 The supplied share link resolves to the direct public playlist above. SoundCloud's oEmbed endpoint verifies playlist `1907678715`, titled **Keep your anger, For better reason! :)**, by **Amirhossein Hajilari**. The application uses the direct URL without share/tracking parameters, so the player does not depend on a mobile short-link redirect.
 
-The SoundCloud iframe is created only after the visitor opens the playlist. **No autoplay** is triggered; playback starts with the widget's play control. The 450px playlist widget adapts to shorter viewports, keeps the close control accessible, and provides a direct SoundCloud link if embedding is unavailable. Closing the dock removes the iframe and stops its playback. Focus returns to the open button; Escape closes the dock when keyboard focus is in its page controls. SoundCloud owns keyboard handling while focus is inside its cross-origin iframe.
+The SoundCloud player is embedded directly in the Soundspace section, beside the introduction on desktop and below it on smaller screens. Its 450px widget includes the track list and playback controls. It uses native lazy loading and **does not autoplay**; visitors choose a track and press the widget's play control in the page. There is no floating dock or open/close action. Scrolling to another section keeps the same iframe mounted, so playback can continue while browsing this page; pause it with the widget's control. The direct SoundCloud link remains available if embedding is unavailable. SoundCloud owns keyboard handling inside its cross-origin iframe.
 
 To change playlists later, update `soundcloudUrl` and `soundcloudTitle` together. The URL must be public. Changes to tracks within this same playlist are supplied by SoundCloud and do not require changing the website. The widget requires SoundCloud network access and may be affected by browser privacy settings or track availability. No SoundCloud API key, login or new environment variable is required.
 

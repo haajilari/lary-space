@@ -199,21 +199,26 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0; 
 
 /* Soundspace */
 .sound-section { position: relative; background: #051b13; overflow: hidden; }
-.sound-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 4%; min-height: 790px; padding-block: 110px 120px; align-items: center; }
+.sound-layout { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: 4%; min-height: 790px; padding-block: 110px 120px; align-items: center; }
 .sound-copy { position: relative; z-index: 2; }
 .sound-copy h2 { margin-top: 41px; }
 .sound-copy h2 em { color: #b1daa8; }
 .sound-copy .section-intro { max-width: 430px; }
 .sound-separator { margin: 44px 0 32px; width: 76px; height: 1px; background: #4e8a65; }
-.sound-copy h3 { font-size: 19px; margin: 13px 0 6px; letter-spacing: -.025em; }
+.sound-copy h3 { font-size: 19px; margin: 13px 0 6px; letter-spacing: -.025em; overflow-wrap: anywhere; }
 .sound-footnote { font-size: 12px; max-width: 350px; line-height: 1.7; color: #7fab8d; }
 .sound-unavailable { margin-top: 19px; display: inline-flex; gap: 14px; font-size: 10px; letter-spacing: .12em; font-family: var(--font-latin); color: #95c2a3; align-items: center; text-transform: uppercase; }
 .sound-unavailable .pulse-dot { animation: pulse 2.6s infinite alternate; }
 @keyframes pulse { to { opacity: .3; box-shadow: none; } }
 .button-lime { background: #c0edba; color: #06402a; margin-top: 20px; }.button-lime:hover { background: #e0f5d1; }
-.sound-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 15px 22px; margin-top: 20px; }
-.sound-actions .button-lime { margin-top: 0; }
 .soundcloud-link { display: inline-flex; align-items: center; gap: 8px; color: #b1daa8; font-size: 12px; line-height: 1.7; text-decoration: underline; text-underline-offset: 4px; }
+/* Reserve room for the fixed desktop roadmap beside the interactive player. */
+.sound-player { min-width: 0; margin-inline-end: 124px; padding: 20px; border: 1px solid #5a876b; border-radius: 18px; background: #f1f5ec; box-shadow: 0 24px 70px #0003; color: #063623; }
+.sound-player-head { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; font: 700 11px var(--font-latin); letter-spacing: .09em; }
+.sound-player-head svg { width: 19px; height: 19px; }
+.sound-player-index { margin-inline-start: auto; font-size: 9px; font-weight: 500; letter-spacing: .1em; color: #50755b; }
+.sound-player iframe { display: block; width: 100%; height: 450px; border: 0; border-radius: 8px; background: white; }
+.sound-player .soundcloud-link { margin-top: 14px; color: #18613e; }
 .vinyl-scene { min-height: 610px; display: flex; justify-content: center; align-items: center; position: relative; isolation: isolate; }
 .vinyl-scene::before { content: ""; position: absolute; width: 560px; height: 560px; background: radial-gradient(circle, #195c3c 0%, rgba(9,70,42,.23) 45%, transparent 65%); border-radius: 50%; }
 .vinyl-orbit { position: absolute; width: min(100%, 625px); height: 570px; border: 1px solid #326c4a; border-radius: 50%; transform: rotate(-17deg); opacity: .6; }
@@ -223,13 +228,7 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0; 
 .vinyl-label { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 44%; height: 44%; border-radius: 50%; background: radial-gradient(circle at 40% 32%, #d6ecc7, #71be8a 67%, #369369 100%); border: 4px solid #062b1e; color: #073b26; font-family: var(--font-latin); font-weight: 900; text-align: center; position: relative; box-shadow: 0 0 0 2px #8cbf92; }
 .vinyl-label span { font-size: 24px; letter-spacing: -.08em; }.vinyl-label strong { font-size: 33px; letter-spacing: -.065em; }.vinyl-label small { font-size: 7px; letter-spacing: .2em; margin-top: 10px; }
 .vinyl-label::after { position: absolute; content: ""; top: 50%; left: 50%; width: 9px; height: 9px; border-radius: 50%; background: #092e20; transform: translate(-50%,-50%); }
-.vinyl-spinning { animation: spin 16s linear infinite; }
-@keyframes spin { to { transform: rotate(342deg); } }
 .vinyl-bottom-caption { position: absolute; bottom: 12px; font: 9px var(--font-latin); letter-spacing: .16em; color: #79a388; }
-.audio-dock { position: fixed; z-index: 110; bottom: max(16px, env(safe-area-inset-bottom)); inset-inline-end: 16px; width: min(440px,calc(100vw - 32px)); max-height: calc(100svh - 32px); padding: 15px; border: 1px solid #5aa275; border-radius: 14px; background: #f1f5ec; box-shadow: 0 16px 75px #0008; color: #063623; overflow: auto; overscroll-behavior: contain; }
-.audio-dock-head { display: flex; justify-content: space-between; align-items: center; font: 11px var(--font-latin); font-weight: bold; letter-spacing: .09em; margin-bottom: 12px; }
-.audio-dock-head > span { display: flex; align-items: center; gap: 9px; }.audio-dock-head svg { width: 19px; height: 19px; }.audio-dock iframe { display: block; width: 100%; height: min(450px,calc(100svh - 165px)); border: 0; border-radius: 7px; }
-.audio-dock .soundcloud-link { margin-top: 10px; color: #18613e; font-size: 11px; }
 .icon-circle { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid #d5e2d5; background: #edf5eb; color: #154331; cursor: pointer; }
 .icon-circle.dark { color: #123f2b; }
 
@@ -309,6 +308,7 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0; 
 /* Accessibility and responsive */
 @media (max-width: 1320px) {
   .layout-container { width: min(calc(100% - 100px), 1200px); }
+  .sound-player { margin-inline-end: 24px; }
   .section-rail { width: 48px; padding-inline: 15px 11px; }
   .rail-track { gap: 15px; }
   .rail-stop { gap: 0; }
@@ -378,7 +378,8 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0; 
   .stack-board { grid-template-columns: 1fr; gap: 55px; }
   .stack-big strong { font-size: clamp(40px,7vw,62px); }
   .stack-side-note { margin-top: 35px; }
-  .sound-layout { grid-template-columns: 1fr; padding-block: 90px 70px; min-height: 0; }
+  .sound-layout { grid-template-columns: minmax(0,1fr); gap: 40px; padding-block: 90px 70px; min-height: 0; }
+  .sound-player { margin-inline-end: 0; }
   .sound-copy h2 { margin-top: 27px; }
   .sound-separator { margin: 30px 0 25px; }
   .vinyl-scene { min-height: 480px; }
@@ -402,6 +403,7 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0; 
   .hero-buttons .button { font-size: 11px; }
   .project-cover { height: 215px; }
   .about-lead h2 { font-size: clamp(45px,10vw,69px); }
+  .sound-player { padding: 12px; border-radius: 14px; }
   .vinyl-scene { min-height: 365px; }
   .vinyl-orbit { height: 325px; }
   .vinyl-label span { font-size: 15px; }.vinyl-label strong { font-size: 20px; }.vinyl-label small { font-size: 5px; }
