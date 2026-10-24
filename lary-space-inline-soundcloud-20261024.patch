@@ -1,0 +1,234 @@
+diff --git a/README.md b/README.md
+index ee637b27484d6117633b3885324de1ccf0b690ff..d0f30747466486cb4563efbe450a741f0a11bb09 100644
+--- a/README.md
++++ b/README.md
+@@ -14,6 +14,7 @@ Open **http://localhost:3000** (redirects to `/en`). The Persian version is **ht
+ Production build:
+ 
+ ```bash
++node node_modules/next/dist/bin/next typegen
+ npm run typecheck
+ npm run build
+ npm start
+@@ -27,6 +28,7 @@ Use Node.js 22.12+; `.nvmrc` selects Node 24 for Cloudflare Builds and local ver
+ 
+ ```bash
+ npm ci
++node node_modules/next/dist/bin/next typegen
+ npm run typecheck
+ npm run build:vinext
+ npm run check:worker
+@@ -35,6 +37,8 @@ npm run check:deploy
+ 
+ `check:worker` validates the built Worker with Wrangler's dry run. `check:deploy` validates the vinext deployment command without uploading or publishing.
+ 
++Next.js and vinext both generate `.next/types/routes.d.ts` with different shapes. Before a standalone `typecheck`, run `node node_modules/next/dist/bin/next typegen` to regenerate matching Next.js route and validator types, especially after a vinext build. The patch installer does this before validation and once more after the Worker checks.
++
+ The project uses vinext 1.3.0 with its supported Wrangler integration, the Cloudflare Vite plugin and `wrangler.jsonc`. The Worker is named `lary-space`; its generated deploy configuration is `dist/server/wrangler.json`. The original Next.js development/build scripts remain available alongside `dev:vinext`, `build:vinext` and `start:vinext`.
+ 
+ After committing and pushing to `haajilari/lary-space` on `main`, configure Workers Builds:
+@@ -74,7 +78,7 @@ The compatibility scanner reports support for all Next.js imports used by this p
+ - Apple-inspired gentle section fade on entrance/exit; reduced-motion preference respected
+ - Fixed desktop section roadmap, compact mobile navigation, functional anchor navigation
+ - Three portfolio project cards with accessible case-study dialogs (Escape and focus handling)
+-- Soundspace connected to Lary's public SoundCloud playlist, with a playlist-sized floating widget, localized controls, keyboard open/close behavior and a direct SoundCloud link
++- Soundspace connected to Lary's public SoundCloud playlist, with an inline player and track list inside the page, localized labels and a direct SoundCloud link
+ - Contact dialog from the desktop/mobile navigation, section roadmap and contact buttons, with WhatsApp, email and LinkedIn choices; Escape, backdrop dismissal, keyboard focus containment and focus restoration
+ - Real `mailto:` and GitHub links, copy-email action using `amirhossein.hajilari@gmail.com`
+ - Self-hosted Vazirmatn variable font, including the Persian language-switch label on the English page
+@@ -100,7 +104,7 @@ export const profile = {
+ 
+ The supplied share link resolves to the direct public playlist above. SoundCloud's oEmbed endpoint verifies playlist `1907678715`, titled **Keep your anger, For better reason! :)**, by **Amirhossein Hajilari**. The application uses the direct URL without share/tracking parameters, so the player does not depend on a mobile short-link redirect.
+ 
+-The SoundCloud iframe is created only after the visitor opens the playlist. **No autoplay** is triggered; playback starts with the widget's play control. The 450px playlist widget adapts to shorter viewports, keeps the close control accessible, and provides a direct SoundCloud link if embedding is unavailable. Closing the dock removes the iframe and stops its playback. Focus returns to the open button; Escape closes the dock when keyboard focus is in its page controls. SoundCloud owns keyboard handling while focus is inside its cross-origin iframe.
++The SoundCloud player is embedded directly in the Soundspace section, beside the introduction on desktop and below it on smaller screens. Its 450px widget includes the track list and playback controls. It uses native lazy loading and **does not autoplay**; visitors choose a track and press the widget's play control in the page. There is no floating dock or open/close action. Scrolling to another section keeps the same iframe mounted, so playback can continue while browsing this page; pause it with the widget's control. The direct SoundCloud link remains available if embedding is unavailable. SoundCloud owns keyboard handling inside its cross-origin iframe.
+ 
+ To change playlists later, update `soundcloudUrl` and `soundcloudTitle` together. The URL must be public. Changes to tracks within this same playlist are supplied by SoundCloud and do not require changing the website. The widget requires SoundCloud network access and may be affected by browser privacy settings or track availability. No SoundCloud API key, login or new environment variable is required.
+ 
+diff --git a/app/globals.css b/app/globals.css
+index 3f1d74b14c5a64e9901e5f786af9f46b858a7e7d..71b540df30cfd4f46266f964b5f7d98fdf48bd97 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -199,21 +199,26 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0;
+ 
+ /* Soundspace */
+ .sound-section { position: relative; background: #051b13; overflow: hidden; }
+-.sound-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 4%; min-height: 790px; padding-block: 110px 120px; align-items: center; }
++.sound-layout { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: 4%; min-height: 790px; padding-block: 110px 120px; align-items: center; }
+ .sound-copy { position: relative; z-index: 2; }
+ .sound-copy h2 { margin-top: 41px; }
+ .sound-copy h2 em { color: #b1daa8; }
+ .sound-copy .section-intro { max-width: 430px; }
+ .sound-separator { margin: 44px 0 32px; width: 76px; height: 1px; background: #4e8a65; }
+-.sound-copy h3 { font-size: 19px; margin: 13px 0 6px; letter-spacing: -.025em; }
++.sound-copy h3 { font-size: 19px; margin: 13px 0 6px; letter-spacing: -.025em; overflow-wrap: anywhere; }
+ .sound-footnote { font-size: 12px; max-width: 350px; line-height: 1.7; color: #7fab8d; }
+ .sound-unavailable { margin-top: 19px; display: inline-flex; gap: 14px; font-size: 10px; letter-spacing: .12em; font-family: var(--font-latin); color: #95c2a3; align-items: center; text-transform: uppercase; }
+ .sound-unavailable .pulse-dot { animation: pulse 2.6s infinite alternate; }
+ @keyframes pulse { to { opacity: .3; box-shadow: none; } }
+ .button-lime { background: #c0edba; color: #06402a; margin-top: 20px; }.button-lime:hover { background: #e0f5d1; }
+-.sound-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 15px 22px; margin-top: 20px; }
+-.sound-actions .button-lime { margin-top: 0; }
+ .soundcloud-link { display: inline-flex; align-items: center; gap: 8px; color: #b1daa8; font-size: 12px; line-height: 1.7; text-decoration: underline; text-underline-offset: 4px; }
++/* Reserve room for the fixed desktop roadmap beside the interactive player. */
++.sound-player { min-width: 0; margin-inline-end: 124px; padding: 20px; border: 1px solid #5a876b; border-radius: 18px; background: #f1f5ec; box-shadow: 0 24px 70px #0003; color: #063623; }
++.sound-player-head { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; font: 700 11px var(--font-latin); letter-spacing: .09em; }
++.sound-player-head svg { width: 19px; height: 19px; }
++.sound-player-index { margin-inline-start: auto; font-size: 9px; font-weight: 500; letter-spacing: .1em; color: #50755b; }
++.sound-player iframe { display: block; width: 100%; height: 450px; border: 0; border-radius: 8px; background: white; }
++.sound-player .soundcloud-link { margin-top: 14px; color: #18613e; }
+ .vinyl-scene { min-height: 610px; display: flex; justify-content: center; align-items: center; position: relative; isolation: isolate; }
+ .vinyl-scene::before { content: ""; position: absolute; width: 560px; height: 560px; background: radial-gradient(circle, #195c3c 0%, rgba(9,70,42,.23) 45%, transparent 65%); border-radius: 50%; }
+ .vinyl-orbit { position: absolute; width: min(100%, 625px); height: 570px; border: 1px solid #326c4a; border-radius: 50%; transform: rotate(-17deg); opacity: .6; }
+@@ -223,13 +228,7 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0;
+ .vinyl-label { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 44%; height: 44%; border-radius: 50%; background: radial-gradient(circle at 40% 32%, #d6ecc7, #71be8a 67%, #369369 100%); border: 4px solid #062b1e; color: #073b26; font-family: var(--font-latin); font-weight: 900; text-align: center; position: relative; box-shadow: 0 0 0 2px #8cbf92; }
+ .vinyl-label span { font-size: 24px; letter-spacing: -.08em; }.vinyl-label strong { font-size: 33px; letter-spacing: -.065em; }.vinyl-label small { font-size: 7px; letter-spacing: .2em; margin-top: 10px; }
+ .vinyl-label::after { position: absolute; content: ""; top: 50%; left: 50%; width: 9px; height: 9px; border-radius: 50%; background: #092e20; transform: translate(-50%,-50%); }
+-.vinyl-spinning { animation: spin 16s linear infinite; }
+-@keyframes spin { to { transform: rotate(342deg); } }
+ .vinyl-bottom-caption { position: absolute; bottom: 12px; font: 9px var(--font-latin); letter-spacing: .16em; color: #79a388; }
+-.audio-dock { position: fixed; z-index: 110; bottom: max(16px, env(safe-area-inset-bottom)); inset-inline-end: 16px; width: min(440px,calc(100vw - 32px)); max-height: calc(100svh - 32px); padding: 15px; border: 1px solid #5aa275; border-radius: 14px; background: #f1f5ec; box-shadow: 0 16px 75px #0008; color: #063623; overflow: auto; overscroll-behavior: contain; }
+-.audio-dock-head { display: flex; justify-content: space-between; align-items: center; font: 11px var(--font-latin); font-weight: bold; letter-spacing: .09em; margin-bottom: 12px; }
+-.audio-dock-head > span { display: flex; align-items: center; gap: 9px; }.audio-dock-head svg { width: 19px; height: 19px; }.audio-dock iframe { display: block; width: 100%; height: min(450px,calc(100svh - 165px)); border: 0; border-radius: 7px; }
+-.audio-dock .soundcloud-link { margin-top: 10px; color: #18613e; font-size: 11px; }
+ .icon-circle { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid #d5e2d5; background: #edf5eb; color: #154331; cursor: pointer; }
+ .icon-circle.dark { color: #123f2b; }
+ 
+@@ -309,6 +308,7 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0;
+ /* Accessibility and responsive */
+ @media (max-width: 1320px) {
+   .layout-container { width: min(calc(100% - 100px), 1200px); }
++  .sound-player { margin-inline-end: 24px; }
+   .section-rail { width: 48px; padding-inline: 15px 11px; }
+   .rail-track { gap: 15px; }
+   .rail-stop { gap: 0; }
+@@ -378,7 +378,8 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0;
+   .stack-board { grid-template-columns: 1fr; gap: 55px; }
+   .stack-big strong { font-size: clamp(40px,7vw,62px); }
+   .stack-side-note { margin-top: 35px; }
+-  .sound-layout { grid-template-columns: 1fr; padding-block: 90px 70px; min-height: 0; }
++  .sound-layout { grid-template-columns: minmax(0,1fr); gap: 40px; padding-block: 90px 70px; min-height: 0; }
++  .sound-player { margin-inline-end: 0; }
+   .sound-copy h2 { margin-top: 27px; }
+   .sound-separator { margin: 30px 0 25px; }
+   .vinyl-scene { min-height: 480px; }
+@@ -402,6 +403,7 @@ button.rail-stop { width: 100%; padding: 0; background: transparent; border: 0;
+   .hero-buttons .button { font-size: 11px; }
+   .project-cover { height: 215px; }
+   .about-lead h2 { font-size: clamp(45px,10vw,69px); }
++  .sound-player { padding: 12px; border-radius: 14px; }
+   .vinyl-scene { min-height: 365px; }
+   .vinyl-orbit { height: 325px; }
+   .vinyl-label span { font-size: 15px; }.vinyl-label strong { font-size: 20px; }.vinyl-label small { font-size: 5px; }
+diff --git a/components/Soundspace.tsx b/components/Soundspace.tsx
+index 718d18ad7bf65890e36b5abb1f9a2048478448e5..e15030c594a5120f90c0e13a87f9b34ef09de63c 100644
+--- a/components/Soundspace.tsx
++++ b/components/Soundspace.tsx
+@@ -1,9 +1,6 @@
+-"use client";
+-
+-import { useEffect, useRef, useState } from "react";
+ import type { Copy } from "@/content/site";
+ import { profile } from "@/content/site";
+-import { SoundIcon, CloseIcon } from "./Icons";
++import { SoundIcon } from "./Icons";
+ 
+ function soundcloudEmbedUrl(url: string) {
+   try {
+@@ -14,38 +11,31 @@ function soundcloudEmbedUrl(url: string) {
+ }
+ 
+ export default function Soundspace({ copy }: { copy: Copy }) {
+-  const [playerOpen, setPlayerOpen] = useState(false);
+-  const openButtonRef = useRef<HTMLButtonElement>(null);
+-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+   const embed = soundcloudEmbedUrl(profile.soundcloudUrl);
+-  useEffect(() => {
+-    if (playerOpen) closeButtonRef.current?.focus({ preventScroll: true });
+-  }, [playerOpen]);
+-  const closePlayer = () => {
+-    setPlayerOpen(false);
+-    openButtonRef.current?.focus({ preventScroll: true });
+-  };
++
+   return (
+-    <>
+-      <section className="sound-section story-section" id="sound" data-section="sound" aria-labelledby="sound-heading">
+-        <div className="layout-container sound-layout">
+-          <div className="sound-copy"><span className="eyebrow pale">{copy.sound.eyebrow}</span><h2 id="sound-heading" className="display-heading"><span>{copy.sound.title1}</span><em>{copy.sound.title2}</em></h2><p className="section-intro muted-light">{copy.sound.description}</p>
+-            <div className="sound-separator" />
+-            <span className="eyebrow pale">{copy.sound.genre}</span>
+-            <h3 dir="auto">{embed ? profile.soundcloudTitle : copy.sound.awaiting}</h3>
+-            <p className="sound-footnote">{embed ? copy.sound.playlistNote : copy.sound.comingSoon}</p>
+-            {embed ? <div className="sound-actions"><button ref={openButtonRef} type="button" className="button button-lime" aria-expanded={playerOpen} aria-controls="soundcloud-player" onClick={() => setPlayerOpen(true)}><SoundIcon /> {copy.sound.play}</button><a className="soundcloud-link" href={profile.soundcloudUrl} target="_blank" rel="noreferrer noopener">{copy.sound.openOnSoundCloud}<span aria-hidden="true">↗</span></a></div> : <span className="sound-unavailable"><span className="pulse-dot" /> {copy.sound.placeholder}</span>}
+-          </div>
+-          <div className="vinyl-scene" aria-label="Decorative vinyl record illustration"><div className="vinyl-orbit"><span className="vinyl-line" /></div><div className={`vinyl-disc ${playerOpen ? "vinyl-spinning" : ""}`}><div className="vinyl-label"><span>LARY</span><strong>SPACE</strong><small>ANOTHER FREQUENCY</small></div></div><span className="vinyl-bottom-caption">SOUND / 004 — LARYSPACE</span></div>
++    <section className="sound-section story-section" id="sound" data-section="sound" aria-labelledby="sound-heading">
++      <div className="layout-container sound-layout">
++        <div className="sound-copy">
++          <span className="eyebrow pale">{copy.sound.eyebrow}</span>
++          <h2 id="sound-heading" className="display-heading"><span>{copy.sound.title1}</span><em>{copy.sound.title2}</em></h2>
++          <p className="section-intro muted-light">{copy.sound.description}</p>
++          <div className="sound-separator" />
++          <span className="eyebrow pale">{copy.sound.genre}</span>
++          <h3 dir="auto">{embed ? profile.soundcloudTitle : copy.sound.awaiting}</h3>
++          <p className="sound-footnote">{embed ? copy.sound.playlistNote : copy.sound.comingSoon}</p>
++          {!embed ? <span className="sound-unavailable"><span className="pulse-dot" /> {copy.sound.placeholder}</span> : null}
+         </div>
+-      </section>
+-      {embed && playerOpen ? (
+-        <aside id="soundcloud-player" className="audio-dock" aria-label={copy.sound.playerTitle} onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); closePlayer(); } }}>
+-          <div className="audio-dock-head"><span><SoundIcon /> SOUNDSPACE</span><button ref={closeButtonRef} type="button" className="icon-circle dark" aria-label={copy.sound.closePlayer} onClick={closePlayer}><CloseIcon /></button></div>
+-          <iframe title={copy.sound.playerTitle} src={embed} width="100%" height="450" frameBorder="0" allow="autoplay; encrypted-media" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
+-          <a className="soundcloud-link" href={profile.soundcloudUrl} target="_blank" rel="noreferrer noopener">{copy.sound.openOnSoundCloud}<span aria-hidden="true">↗</span></a>
+-        </aside>
+-      ) : null}
+-    </>
++        {embed ? (
++          <div id="soundcloud-player" className="sound-player" role="group" aria-label={copy.sound.playerTitle}>
++            <div className="sound-player-head" aria-hidden="true" dir="ltr"><SoundIcon /><span>SOUNDSPACE</span><span className="sound-player-index">004 / LARYSPACE</span></div>
++            <iframe title={copy.sound.playerTitle} src={embed} width="100%" height="450" allow="autoplay; encrypted-media" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
++            <a className="soundcloud-link" href={profile.soundcloudUrl} target="_blank" rel="noreferrer noopener">{copy.sound.openOnSoundCloud}<span aria-hidden="true">↗</span></a>
++          </div>
++        ) : (
++          <div className="vinyl-scene" aria-hidden="true"><div className="vinyl-orbit"><span className="vinyl-line" /></div><div className="vinyl-disc"><div className="vinyl-label"><span>LARY</span><strong>SPACE</strong><small>ANOTHER FREQUENCY</small></div></div><span className="vinyl-bottom-caption">SOUND / 004 — LARYSPACE</span></div>
++        )}
++      </div>
++    </section>
+   );
+ }
+diff --git a/content/site.ts b/content/site.ts
+index 907e4e1831099fedd7f02abaf30670f4c822a437..46353e4cdcaa01234eb9d998f6e544326346d6b6 100644
+--- a/content/site.ts
++++ b/content/site.ts
+@@ -22,7 +22,7 @@ export type Copy = {
+   work: { eyebrow: string; title: string; description: string; more: string; challenge: string; approach: string; details: string; features: string; projects: readonly Project[] };
+   about: { eyebrow: string; title1: string; title2: string; lead: string; quote: string; quoteBy: string; values: readonly { index: string; title: string; body: string }[] };
+   stack: { eyebrow: string; title: string; description: string; main: string; toolbox: string; build: string; mainSkills: readonly string[]; extras: readonly string[] };
+-  sound: { eyebrow: string; title1: string; title2: string; description: string; genre: string; awaiting: string; comingSoon: string; play: string; closePlayer: string; placeholder: string; playlistNote: string; openOnSoundCloud: string; playerTitle: string };
++  sound: { eyebrow: string; title1: string; title2: string; description: string; genre: string; awaiting: string; comingSoon: string; placeholder: string; playlistNote: string; openOnSoundCloud: string; playerTitle: string };
+   contact: { eyebrow: string; title1: string; title2: string; description: string; email: string; copy: string; copied: string; github: string; made: string; rights: string; dialogTitle: string; dialogDescription: string };
+   modal: { close: string };
+ };
+@@ -135,8 +135,8 @@ export const copy: Record<Locale, Copy> = {
+     sound: {
+       eyebrow: "04 / SOUNDSPACE", title1: "A different", title2: "frequency.",
+       description: "There's more to a person than their work. Here's a small window into the sounds that travel with me.", genre: "THE SOUNDTRACK TO MY SPACE", awaiting: "The playlist is taking shape.",
+-      comingSoon: "A SoundCloud track or playlist can be connected here without changing the design.", play: "Open the playlist", closePlayer: "Close player", placeholder: "SOMETHING IS COMING TO LIFE",
+-      playlistNote: "A little of what I listen to, collected in one place.", openOnSoundCloud: "Listen on SoundCloud", playerTitle: "LarySpace SoundCloud playlist",
++      comingSoon: "A SoundCloud track or playlist can be connected here without changing the design.", placeholder: "SOMETHING IS COMING TO LIFE",
++      playlistNote: "A little of what I listen to. Choose a track and press play, right here.", openOnSoundCloud: "Listen on SoundCloud", playerTitle: "LarySpace SoundCloud playlist",
+     },
+     contact: {
+       eyebrow: "05 / CONNECT", title1: "Let's make", title2: "something matter.", description: "A new idea, a difficult problem, or just a good conversation — my inbox is open.",
+@@ -173,8 +173,8 @@ export const copy: Record<Locale, Copy> = {
+     sound: {
+       eyebrow: "۰۴ / فضای موسیقی", title1: "در فرکانسی", title2: "دیگر.",
+       description: "آدم‌ها فقط با کارشان شناخته نمی‌شوند. اینجا پنجرهٔ کوچکی است به موسیقی‌هایی که با من همراه‌اند.", genre: "موسیقیِ فضای من", awaiting: "پلی‌لیست هنوز در حال شکل‌گیری است.",
+-      comingSoon: "می‌توانیم یک ترک یا پلی‌لیست SoundCloud را بدون تغییر طراحی به این قسمت وصل کنیم.", play: "بازکردن پلی‌لیست", closePlayer: "بستن پلیر", placeholder: "چیزی در حال شکل‌گرفتن است",
+-      playlistNote: "بخشی از موسیقی‌هایی که گوش می‌دهم؛ جمع‌شده در یک پلی‌لیست.", openOnSoundCloud: "شنیدن در SoundCloud", playerTitle: "پلی‌لیست لری‌اسپیس در SoundCloud",
++      comingSoon: "می‌توانیم یک ترک یا پلی‌لیست SoundCloud را بدون تغییر طراحی به این قسمت وصل کنیم.", placeholder: "چیزی در حال شکل‌گرفتن است",
++      playlistNote: "بخشی از موسیقی‌هایی که گوش می‌دهم؛ همین‌جا آهنگ دلخواهت را انتخاب و پخش کن.", openOnSoundCloud: "شنیدن در SoundCloud", playerTitle: "پلی‌لیست لری‌اسپیس در SoundCloud",
+     },
+     contact: {
+       eyebrow: "۰۵ / ارتباط", title1: "بیایید چیزی", title2: "ماندگار بسازیم.", description: "یک ایدهٔ تازه، مسئله‌ای پیچیده یا حتی یک گفت‌وگوی خوب؛ خوشحال می‌شوم از تو بشنوم.",
